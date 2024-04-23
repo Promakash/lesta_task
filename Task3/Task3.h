@@ -1,8 +1,10 @@
 #include <vector>
 #include "random"
+#include <type_traits>
 
-int partition(std::vector <int>& arr, int x, int l, int r) {
-    int e = l, n = l, g = l;
+template<typename T>
+size_t partition(std::vector <T>& arr, T x, size_t l, size_t r) {
+    size_t e = l, n = l, g = l;
     while (n < r) {
         if (arr[n] < x) {
             std::swap(arr[g], arr[n]);
@@ -19,7 +21,8 @@ int partition(std::vector <int>& arr, int x, int l, int r) {
     return e;
 }
 
-void quicksort(std::vector<int>& arr, int l, int r) {
+template<typename T>
+void quicksort(std::vector<T>& arr, size_t l, size_t r) {
     if (l == r) return;
     int pivot = arr[l + std::rand() % (r - l)];
     int p = partition(arr, pivot, l, r);
@@ -30,4 +33,10 @@ void quicksort(std::vector<int>& arr, int l, int r) {
     }
     quicksort(arr, l, p);
     quicksort(arr, rp + 1, r);
+}
+
+template<typename T>
+void quicksort_handler(std::vector<T>& arr) {
+    static_assert(std::is_arithmetic<T>::value, "Must be number type!");
+    quicksort(arr, 0, arr.size());
 }
